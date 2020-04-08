@@ -61,80 +61,43 @@ int mlcs(char a[], int n, char b[], int m) {
 
 
 int dlcs(char a[], int n, char b[], int m) {
-  int j = 0;
+
+  int length[MAX_SIZE+1][MAX_SIZE+1];
+
+  // Vamos considerar para os loops
+  // n = i iterador de n (da lista a)
+  // m = j iterador de m (da lista b)
   int i = 0;
+  int j = 0;
 
-  int counter = 0;
+  while (i < n + 1) {
+    while (j < m + 1) {
 
-  printf("%s \n", "N");
-  printf("%d \n", n);
-  printf("%s \n", "M");
-  printf("%d \n", m);
-
-  if (n > m) {
-    printf("%s \n", "N >");
-    for (i; i <= (n-1); i ++) {
-      for (j; j <= (m-1); j++) {
-        if (a[i] == b[j]) {
-          printf("%s \n", "N >");
-          printf("%c \n", a[i]);
-          counter += 1;
-          break;
-        }
+      // length[i][j] = 0 se i == 0 ou j == 0;
+      if (i == 0 || j == 0) {
+        length[i][j] = 0;
+        j++;
       }
-      if (j >= (m-1)) {
-        break;
-      } 
-    }
-    printf("%s \n", "PASSOU 1");
-    printf("%s \n", "Counter start");
-    printf("%d \n", counter);
-    printf("%s \n", "Counter end");
-    return counter;
-  }
 
-  if (n < m) {
-    // printf("%s \n", "M >");
-    for (i; i < (m-1); i ++) {
-      for (j; j < (n-1); j++) {
-        if (a[i] == b[j]) {
-          printf("%s \n", "M >");
-          printf("%c \n", a[i]);
-          counter += 1;
-          break;
-        }
+      // length[i][j] = length[i-1][j-1] + 1 se a[i-1] == b[j-1];
+      else if (a[i-1] == b[j-1]) {
+        length[i][j] = length[i-1][j-1] + 1;
+        j++;
       }
-      if (j >= (m-1)) {
-        break;
+
+      // length[i][j] recebe o maior valor dentre length[i-1][j] e length[i][j-1] caso contrário.
+      else {
+        if (length[i-1][j] > length[i][j-1]) {
+          length[i][j] = length[i-1][j];
+        }
+        else {
+          length[i][j] = length[i][j-1];
+        }
+        j++;
       }
     }
-    printf("%s \n", "PASSOU 2");
-    printf("%s \n", "Counter start");
-    printf("%d \n", counter);
-    printf("%s \n", "Counter end");
-    return counter;
+    i++;
   }
 
-  if (n == m) {
-    // printf("%s \n", "M >");
-    for (i; i < (m-1); i ++) {
-      for (j; j < (n-1); j++) {
-        if (a[i] == b[j]) {
-          printf("%s \n", "M >");
-          printf("%c \n", a[i]);
-          counter += 1;
-          break;
-        }
-      }
-      if (j >= (m-1)) {
-        break;
-      }
-    }
-    printf("%s \n", "PASSOU 3");
-
-    printf("%s \n", "Counter start");
-    printf("%d \n", counter);
-    printf("%s \n", "Counter end");
-    return counter;
-  }
+  return length[n][m];
 }
